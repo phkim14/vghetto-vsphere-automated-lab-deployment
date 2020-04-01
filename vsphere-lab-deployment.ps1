@@ -75,6 +75,7 @@ $vMotionDVPGName = "vMotion Network"
 $VSANDVPGName = "VSAN Network"
 $EdgeVDSName = "edge-VDS"
 $trunkDVPGName = "trunk1"
+$EdgeTrunkRange = "0-4094"
 $MTU = "1700"
 
 # VCSA Deployment Configuration
@@ -980,7 +981,7 @@ if($setupNewVC -eq 1) {
 
         My-Logger "Creating Edge VDS ..."
         New-VDSwitch -Name $EdgeVDSName -Location $NewVCDatacenterName -NumUplinkPorts 2 -Mtu $MTU
-        New-VDPortgroup -VDSwitch $EdgeVDSName -Name $trunkDVPGName -VlanId $VLAN4095 -Confirm:$false | Out-Null
+        New-VDPortgroup -VDSwitch $EdgeVDSName -Name $trunkDVPGName -VlanTrunkRange $EdgeTrunkRange -Confirm:$false | Out-Null
 
         My-Logger "Adding hosts to Management and Edge VDS ..."
         foreach ($vmhost in Get-Cluster -Server $vc | Get-VMHost) {
