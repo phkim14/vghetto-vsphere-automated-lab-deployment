@@ -57,7 +57,7 @@ $NestedESXiHostnameToIPs = @{
     "pk-esxi-05" = "192.168.30.105"
     "pk-esxi-06" = "192.168.30.106"
     "pk-esxi-07" = "192.168.30.107"
-	"pk-esxi-08" = "192.168.30.108"
+    "pk-esxi-08" = "192.168.30.108"
 }
 
 # Nested ESXi VM Resources
@@ -67,7 +67,8 @@ $NestedESXivMEM = "64" #GB
 $NestedESXiCachingvDisk = "25" #GB
 $NestedESXiCapacityvDisk = "500" #GB
 
-# VDS Info
+# VSS/VDS Info
+$VSSName = "vSwitch0"
 $MgmtVDSName = "management-VDS"
 $MgmtDVPGName = "Management Network"
 $vMotionDVPGName = "vMotion Network"
@@ -1011,6 +1012,9 @@ if($setupNewVC -eq 1) {
 
             New-VMHostNetworkAdapter -VMHost $vmhost -PortGroup $vMotionDVPGName -VirtualSwitch $MgmtVDSName -IP $vMotionVmkIP -SubnetMask $VMNetmask -Mtu $MTU -VMotionEnabled:$true -Confirm:$false
             New-VMHostNetworkAdapter -VMHost $vmhost -PortGroup $VSANDVPGName -VirtualSwitch $MgmtVDSName -IP $VSANVmkIP -SubnetMask $VMNetmask -Mtu $MTU -VMotionEnabled:$false -VsanTrafficEnabled:$true -Confirm:$false
+
+            # Remove VSS
+            Remove-VirtualSwitch -VirtualSwitch $VSSName -Confirm:$false 
         }
     }
 
